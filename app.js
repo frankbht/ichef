@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/user');
+var jwt = require('jsonwebtoken');
 
 var port = process.env.PORT || 3000;
 

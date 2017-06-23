@@ -6,21 +6,22 @@ var auth = require('../modules/token');
 
 // print all user
 router.get('/', function(req, res, next) {
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    jwt.verify(token, 'secret', function(err, decoded) {
-        if (err) throw err;
-        if(!decoded) {
-            return res.status(403).send({
-                success: false,
-                message: 'no token!'
-            });            
-        }
-
-        User.find(function(err, users) {
-            if (err) return next(err);
-            res.send(users);
-        });
-    });
+    // var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    // jwt.verify(token, 'secret', function(err, decoded) {
+    //     if (err) throw err;
+    //     if(!decoded) {
+    //         return res.status(403).send({
+    //             success: false,
+    //             message: 'no token!'
+    //         });
+    //     }
+  User.find(function(err, users) {
+    if (err) return next(err);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(users);
+    //res.status(200).send(users);
+    //res.sends(users);
+  });
 });
 
 // create new user
@@ -35,7 +36,6 @@ router.post('/', function(req, res, next) {
 router.get('/:email', function(req, res, next) {
     User.find({ email: req.params.email }, function(err, user) {
         if (err) throw err;
-
         res.send(user);
     });
 });
@@ -56,7 +56,7 @@ router.put('/', function(req, res, next) {
         if (!user) {
             return res.send('wrong username!');
         }
-		user.password = req.body.password;
+		    user.password = req.body.password;
         user.firstName = req.body.firstName;
         user.lastName = req.body.lastName;
         user.address.street1 = req.body.street1;
